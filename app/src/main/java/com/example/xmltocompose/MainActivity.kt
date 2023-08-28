@@ -1,6 +1,10 @@
 package com.example.xmltocompose
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -32,9 +36,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat.getSystemService
 import com.example.xmltocompose.ui.theme.XMLToComposeTheme
 import com.example.xmltocompose.ui.theme.blue
 import com.example.xmltocompose.ui.theme.pastelBlue
@@ -47,10 +53,17 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Initialize the app and load data using CoroutineScope
+        // Check internet connection
+        if (!isInternetAvailable(applicationContext)) {
+            Toast.makeText(this, "No internet connection", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+
+        // Load data using CoroutineScope
         // CoroutineScope is used here for better performance
         CoroutineScope(Dispatchers.IO).launch {
-            DataManager.loadAssetsFromFile(applicationContext)
+            DataManager.loadAssetsFromUrl(applicationContext)
         }
 
         setContent {
@@ -70,7 +83,7 @@ class MainActivity : ComponentActivity() {
                             .padding(it)
                             .fillMaxSize()
                     ) {
-                        mainComposable()
+                        MainComposable()
                     }
                 }
                 )
@@ -81,7 +94,7 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun mainComposable() {
+fun MainComposable() {
 
     // Define mutable state variables for UI interaction
     val isExpanded = remember { mutableStateOf(false) }
@@ -222,10 +235,16 @@ fun GreetingPreview() {
                     .padding(it)
                     .fillMaxSize()
             ) {
-                mainComposable()
+                MainComposable()
             }
         }
         )
 
     }
+}
+
+private fun isInternetAvailable(context: Context): Boolean {
+    val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    val activeNetworkInfo = connectivityManager.activeNetworkInfo
+    return activeNetworkInfo?.isConnectedOrConnecting ?: false
 }

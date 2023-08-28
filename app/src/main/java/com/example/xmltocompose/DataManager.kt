@@ -3,6 +3,10 @@ package com.example.xmltocompose
 import android.content.Context
 import com.example.xmltocompose.models.WidgetInfo
 import com.google.gson.Gson
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.net.HttpURLConnection
+import java.net.URL
 
 
 object DataManager {
@@ -11,25 +15,37 @@ object DataManager {
     var data = emptyArray<WidgetInfo>()
 
     // Function to load data from a JSON file in assets folder
-    fun loadAssetsFromFile(context: Context) {
+    fun loadAssetsFromUrl(context: Context) {
 
-        // Open and read the JSON file from assets
-        val inputStream = context.assets.open("widgets.json")
-        val size = inputStream.available()
-        val buffer = ByteArray(size)
-        inputStream.read(buffer)
-        inputStream.close()
-
-        // Convert the JSON data to a string
-        val json = String(buffer, Charsets.UTF_8)
+        val response = fetchJsonFromUrl("https://raw.githubusercontent.com/bhoomi0104/XML-To-Compose/master/assets/widgets.json")
 
         // Initialize Gson to parse JSON data
         val gson = Gson()
 
         // Parse JSON data and populate the data array
-        data = gson.fromJson(json, Array<WidgetInfo>::class.java)
+        data = gson.fromJson(response, Array<WidgetInfo>::class.java)
 
         // Sort the data array by widget name in alphabetical order (A to Z)
         data= data.sortedBy { it.widget }.toTypedArray()
+    }
+
+    private fun fetchJsonFromUrl(url: String): String {
+        val connection = URL(url).openConnection() as HttpURLConnection
+        connection.requestMethod = "GET"
+        connection.connect()
+
+        val responseCode = connection.responseCode
+        if (responseCode == HttpURLConnection.HTTP_OK) {
+            val reader = BufferedReader(InputStreamReader(connection.inputStream))
+            val response = StringBuilder()
+            var line: String?
+            while (reader.readLine().also { line = it } != null) {
+                response.append(line)
+            }
+            reader.close()
+            return response.toString()
+        } else {
+            throw Exception("Failed to fetch data from URL")
+        }
     }
 }
