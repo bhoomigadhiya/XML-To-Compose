@@ -1,94 +1,122 @@
 [
   {
     "widget": "ImageView",
-    "composable": "Image"
+    "composable": "Image",
+    "syntax": "Image(imageUrl= \"https://example.com/image.png\")",
+    "link" : "https://www.composables.com/components/foundation/image"
   },
   {
     "widget": "TextView",
-    "composable": "Text"
+    "composable": "Text",
+    "syntax": "Text(text= \"Hello, world!\")",
+    "link" : "https://www.composables.com/components/foundation/text"
+
+
   },
   {
     "widget": "Button",
-    "composable": "Button"
+    "composable": "Button",
+    "syntax": "Button(onClick= { /* Do something when clicked */ }){ //content }",
+    "link" : "https://www.composables.com/components/material3/button"
+
   },
   {
     "widget": "EditText",
-    "composable": "BasicTextField"
+    "composable": "BasicTextField",
+    "syntax": "BasicTextField(value= \"My text\")",
+    "link": "https://www.composables.com/components/foundation/basictextfield"
   },
   {
     "widget": "CheckBox",
-    "composable": "Checkbox"
-  },
-  {
-    "widget": "ToggleButton",
-    "composable": "Toggleable"
+    "composable": "Checkbox",
+    "syntax": "Checkbox(checked= true)",
+    "link": "https://www.composables.com/components/material3/checkbox"
   },
   {
     "widget": "SeekBar",
-    "composable": "Slider"
+    "composable": "Slider",
+    "syntax": "Slider(value= 50)",
+    "link": "https://www.composables.com/components/material3/slider"
   },
   {
     "widget": "ProgressBar",
-    "composable": "LinearProgressIndicator"
+    "composable": "LinearProgressIndicator",
+    "syntax": "LinearProgressIndicator(progress= 0.5)",
+    "link": "https://www.composables.com/components/material3/LinearProgressIndicator"
   },
   {
     "widget": "Switch",
-    "composable": "Switch"
-  },
-  {
-    "widget": "Spinner",
-    "composable": "Spinner"
+    "composable": "Switch",
+    "syntax": "Switch(checked= true)",
+    "link": "https://www.composables.com/components/material3/Switch"
+
   },
   {
     "widget": "ListView",
-    "composable": "LazyColumn"
+    "composable": "LazyColumn",
+    "syntax": "LazyColumn(items= [ /* List of items */ ])",
+    "link": "https://www.composables.com/components/foundation/lazycolumn"
   },
   {
     "widget": "GridView",
-    "composable": "LazyVerticalGrid"
+    "composable": "LazyVerticalGrid",
+    "syntax": "LazyVerticalGrid(items= [ /* List of items */ ])",
+    "link": "https://www.composables.com/components/foundation/lazyverticalgrid"
   },
   {
     "widget": "AppBar",
-    "composable": "TopAppBar"
+    "composable": "TopAppBar",
+    "syntax": "TopAppBar(title= \"My AppBar\")",
+    "link" : "https://www.composables.com/components/material3/topappbar"
   },
   {
     "widget": "CardView",
-    "composable": "Card"
+    "composable": "Card",
+    "syntax": "Card(modifier= Modifier.padding(16.dp))",
+    "link": "https://www.composables.com/components/material3/card"
   },
   {
     "widget": "ConstraintLayout",
-    "composable": "ConstraintLayout"
+    "composable": "ConstraintLayout",
+    "syntax": "ConstraintLayout(children= [ /* Children of the layout */ ])",
+    "link": "https://www.composables.com/components/material3/card"
   },
   {
     "widget": "FloatingActionButton",
-    "composable": "FloatingActionButton"
-  },
-  {
-    "widget": "GridLayoutManager",
-    "composable": "LazyVerticalGrid"
+    "composable": "FloatingActionButton",
+    "syntax": "FloatingActionButton(onClick= { /* Do something when clicked */ }",
+    "link": "https://www.composables.com/components/material3/floatingactionbutton"
+
   },
   {
     "widget": "LinearLayout",
-    "composable": "Row/Column"
+    "composable": "Row",
+    "syntax": "Row(children= [ /* Children of the layout */ ])",
+    "link": "https://www.composables.com/components/foundation-layout/row"
   },
   {
     "widget": "RecyclerView",
-    "composable": "LazyColumn"
-  },
-  {
-    "widget": "ScrollView",
-    "composable": "ScrollView"
+    "composable": "LazyColumn",
+    "syntax": "LazyColumn(items= [ /* List of items */ ])",
+    "link":"https://www.composables.com/components/foundation/lazycolumn"
   },
   {
     "widget": "Snackbar",
-    "composable": "Snackbar"
+    "composable": "Snackbar",
+    "syntax": "Snackbar(message= \"This is a snackbar\")",
+    "link": "https://www.composables.com/components/material3/snackbar"
   },
   {
     "widget": "DatePicker",
-    "composable": "DatePicker"
+    "composable": "DatePicker",
+    "syntax": "DatePicker(selectedDate= LocalDate.now(), onDateChange= { /* Do something when the date changes */ })",
+    "link": "https://www.composables.com/components/material3/datepicker"
   },
   {
     "widget": "TimePicker",
-    "composable": "TimePicker"
+    "composable": "TimePicker",
+    "syntax": "TimePicker(selectedTime= LocalTime.now(), onTimeChange= { /* Do something when the time changes */ })",
+    "link": "https://www.composables.com/components/material3/timepicker"
+
   }
 ]
