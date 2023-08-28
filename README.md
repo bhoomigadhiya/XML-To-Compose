@@ -9,7 +9,7 @@ The XML to Compose Converter is a tool that assists you in transitioning from cl
 ## Features
 
 - Choose from a variety of classic Android widgets.
-- Instantly discover the equivalent Jetpack Compose composable.
+- Instantly discover the equivalent Jetpack Compose composable, it's syntax and resource to learn that composable.
 - Simplify your migration to Jetpack Compose.
 
 ## Screenshots

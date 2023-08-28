@@ -1,8 +1,11 @@
 package com.example.xmltocompose
 
 import android.content.Context
+import android.content.Intent
+import android.graphics.Paint
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -16,6 +19,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenuItem
@@ -37,10 +41,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat.getSystemService
+import androidx.core.content.ContextCompat.startActivity
 import com.example.xmltocompose.ui.theme.XMLToComposeTheme
 import com.example.xmltocompose.ui.theme.blue
 import com.example.xmltocompose.ui.theme.pastelBlue
@@ -63,7 +74,7 @@ class MainActivity : ComponentActivity() {
         // Load data using CoroutineScope
         // CoroutineScope is used here for better performance
         CoroutineScope(Dispatchers.IO).launch {
-            DataManager.loadAssetsFromUrl(applicationContext)
+            DataManager.loadAssetsFromUrl()
         }
 
         setContent {
@@ -96,10 +107,14 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainComposable() {
 
+    val context = LocalContext.current
+
     // Define mutable state variables for UI interaction
     val isExpanded = remember { mutableStateOf(false) }
     val selectedWidget = remember { mutableStateOf("Widget") }
     val equivalentComposable = remember { mutableStateOf("Composable") }
+    val composableSyntax=remember{ mutableStateOf("") }
+    val composableLink = remember{ mutableStateOf("") }
 
     // Column composable for the main UI content
     Column(modifier = Modifier.padding(8.dp)) {
@@ -139,7 +154,7 @@ fun MainComposable() {
                             readOnly = true,
                             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded.value) },
                             modifier = Modifier.menuAnchor(),
-                            colors = TextFieldDefaults.textFieldColors(containerColor = pastelBlue )
+                            colors = TextFieldDefaults.textFieldColors(containerColor = pastelBlue)
                         )
 
                         // ExposedDropdownMenu displaying different widgets
@@ -149,9 +164,13 @@ fun MainComposable() {
                         ) {
                             DataManager.data.forEach {
                                 DropdownMenuItem(text = { Text(it.widget) }, onClick = {
+
+                                    //change the state values
                                     isExpanded.value = false
                                     selectedWidget.value = it.widget
                                     equivalentComposable.value = it.composable
+                                    composableSyntax.value=it.syntax
+                                    composableLink.value=it.link
                                 })
                             }
                         }
@@ -208,6 +227,83 @@ fun MainComposable() {
                 }
             }
         }
+
+        // Card displaying the equivalent composable
+        Card(
+            elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
+            colors = CardDefaults.cardColors(containerColor = pastelBlue),
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth()
+        ) {
+
+            // Box to center content within the card
+
+            Column(
+                modifier = Modifier
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = "Syntax",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+
+                // Text displaying the selected equivalent composable
+                Text(
+                    text = composableSyntax.value,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color.DarkGray
+                )
+            }
+        }
+
+        // Card displaying the equivalent composable
+        Card(
+            elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
+            colors = CardDefaults.cardColors(containerColor = pastelBlue),
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth()
+        ) {
+
+            // Box to center content within the card
+
+            Column(
+                modifier = Modifier
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = "Resource to learn",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+
+                // Text displaying the selected equivalent composable
+                ClickableText(
+                    text = AnnotatedString(composableLink.value),
+                    onClick = {
+                        // Open the link when clicked
+                        val uri = Uri.parse(composableLink.value)
+                        val intent = Intent(Intent.ACTION_VIEW, uri)
+                        context.startActivity(intent)
+                    },
+                    style = TextStyle(
+                        color = blue,
+                        textDecoration = TextDecoration.Underline
+                    )
+                )
+            }
+        }
+
     }
 
 
@@ -223,7 +319,6 @@ fun GreetingPreview() {
             TopAppBar(
                 title = { Text("XML To Compose") },
                 colors = TopAppBarDefaults.smallTopAppBarColors(
-
                     containerColor = blue,
                     titleContentColor = Color.White
                 )
@@ -244,7 +339,8 @@ fun GreetingPreview() {
 }
 
 private fun isInternetAvailable(context: Context): Boolean {
-    val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    val connectivityManager =
+        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     val activeNetworkInfo = connectivityManager.activeNetworkInfo
     return activeNetworkInfo?.isConnectedOrConnecting ?: false
 }

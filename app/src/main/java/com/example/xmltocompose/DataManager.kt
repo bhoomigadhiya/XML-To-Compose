@@ -15,9 +15,9 @@ object DataManager {
     var data = emptyArray<WidgetInfo>()
 
     // Function to load data from a JSON file in assets folder
-    fun loadAssetsFromUrl(context: Context) {
+    fun loadAssetsFromUrl() {
 
-        val response = fetchJsonFromUrl("https://raw.githubusercontent.com/bhoomi0104/XML-To-Compose/master/assets/widgets.json")
+        val response = fetchJsonFromUrl()
 
         // Initialize Gson to parse JSON data
         val gson = Gson()
@@ -26,11 +26,14 @@ object DataManager {
         data = gson.fromJson(response, Array<WidgetInfo>::class.java)
 
         // Sort the data array by widget name in alphabetical order (A to Z)
-        data= data.sortedBy { it.widget }.toTypedArray()
+        data = data.sortedBy { it.widget }.toTypedArray()
     }
 
-    private fun fetchJsonFromUrl(url: String): String {
-        val connection = URL(url).openConnection() as HttpURLConnection
+    // Function to load data from a JSON file in assets folder
+
+    private fun fetchJsonFromUrl(): String {
+        val connection =
+            URL("https://raw.githubusercontent.com/bhoomi0104/XML-To-Compose/master/assets/widgets.json").openConnection() as HttpURLConnection
         connection.requestMethod = "GET"
         connection.connect()
 
@@ -48,4 +51,5 @@ object DataManager {
             throw Exception("Failed to fetch data from URL")
         }
     }
+
 }
