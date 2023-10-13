@@ -39,4 +39,4 @@ The Timeline project is licensed under the Apache 2.0 License. See the LICENSE f
 
 ## Author
 
-Bhoomi Vaghasiya
+[Bhoomi Vaghasiya](https://www.linkedin.com/in/bhoomivaghasiya/)
