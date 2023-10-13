@@ -13,4 +13,4 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "XMLToCompose"
-include ':app'
+include (":app")
