@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">XMLToCompose</string>
+    <string name="down_arrow">Down arrow</string>
+    <string name="classic_android_widget">Classic Android Widget</string>
+    <string name="equivalent_composable">Equivalent Composable</string>
+    <string name="syntax">Syntax</string>
+    <string name="resource_to_learn">Resource to learn</string>
+    <string name="xml_to_compose">XML To Compose</string>
 </resources>
